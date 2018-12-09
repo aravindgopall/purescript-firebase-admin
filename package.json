@@ -1,0 +1,20 @@
+{
+  "name": "purescript-firebase-admin",
+  "version": "1.0.0",
+  "description": "Purescript Firebase Admin binding",
+  "scripts": {},
+  "dependencies": {
+    "firebase-admin": "^6.3.0"
+  },
+  "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/hgiasac/purescript-firebase-admin.git"
+  },
+  "author": "",
+  "bugs": {
+    "url": "https://github.com/hgiasac/purescript-firebase-admin/issues"
+  },
+  "homepage": "https://github.com/hgiasac/purescript-firebase-admin#readme"
+
+}
