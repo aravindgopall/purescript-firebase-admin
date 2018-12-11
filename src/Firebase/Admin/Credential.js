@@ -3,7 +3,11 @@ const admin = require('firebase-admin');
 
 exports.credentialCertImpl = function (obj, right, left) {
   try {
-    return right(admin.credential.cert(obj));
+    return right(admin.credential.cert({
+      projectId: obj.projectId,
+      privateKey: obj.privateKey.replace(/\\n/g, '\n'),
+      clientEmail: obj.clientEmail
+    }));
   } catch (e) {
     return left(e.toJSON())
   }

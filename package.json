@@ -2,9 +2,10 @@
   "name": "purescript-firebase-admin",
   "version": "1.0.0",
   "description": "Purescript Firebase Admin binding",
-  "scripts": {},
-  "dependencies": {
-    "firebase-admin": "^6.3.0"
+  "scripts": {
+    "postinstall": "bower install",
+    "test": "pulp test",
+    "build": "pulp build"
   },
   "license": "MIT",
   "repository": {
@@ -15,6 +16,11 @@
   "bugs": {
     "url": "https://github.com/hgiasac/purescript-firebase-admin/issues"
   },
-  "homepage": "https://github.com/hgiasac/purescript-firebase-admin#readme"
-
+  "homepage": "https://github.com/hgiasac/purescript-firebase-admin#readme",
+  "devDependencies": {
+    "bower": "^1.8.4",
+    "firebase-admin": "^6.3.0",
+    "pulp": "^12.3.0",
+    "purescript": "^0.12.1"
+  }
 }
