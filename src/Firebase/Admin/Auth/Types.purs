@@ -1,7 +1,5 @@
 module Firebase.Admin.Auth.Types where
 
-import Prelude
-
 import Data.Maybe (Maybe)
 
 foreign import data FirebaseAuth :: Type
@@ -57,3 +55,7 @@ type UserRecord =
   , tokensValidAfterTime :: Maybe String 
   }
 
+type ListUsersResult = 
+  { pageToken :: Maybe String 
+  , users :: Array UserRecord
+  }

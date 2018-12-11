@@ -7,5 +7,7 @@ exports.importUsersImpl = function (auth, records, options) {
 }
 
 exports.importUsersImpl_ = function (auth, records) {
-  return auth.importUsers(records);
+  return function () {
+    return auth.importUsers(records);
+  }
 }

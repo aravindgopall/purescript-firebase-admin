@@ -18,6 +18,7 @@
     "purescript-aff-promise": "^2.0.1"
   },
   "devDependencies": {
-    "purescript-psci-support": "^4.0.0"
+    "purescript-psci-support": "^4.0.0",
+    "purescript-test-unit": "^14.0.0"
   }
 }
