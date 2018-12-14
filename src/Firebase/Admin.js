@@ -2,31 +2,19 @@
 
 const admin = require('firebase-admin');
 
-exports.initializeDefaultAppImpl = function () {
-  return admin.initializeApp();
+exports.initializeDefaultAppImpl = function (left, right) {
+  try {
+    return right(admin.initializeApp());
+  } catch (e) {
+    return left(e.toJSON ? e.toJSON() : e);
+  }
 }
 
 exports.initializeAppImpl = function (options, appName, right, left) {
   try {
     return right(admin.initializeApp(options, appName));
   } catch (e) {
-    return left(e.toJSON())
-  }
-}
-
-exports.initializeAppImpl_ = function (options, right, left) {
-  try {
-    return right(admin.initializeApp(options));
-  } catch (e) {
-    return left(e.toJSON())
-  }
-}
-
-exports.defaultAppImpl = function (right, left) {
-  try {
-    return right(admin.app());
-  } catch (e) {
-    return left(e.toJSON())
+    return left(e.toJSON ? e.toJSON() : e);
   }
 }
 
@@ -38,20 +26,24 @@ exports.appImpl = function (appName, right, left) {
   }
 }
 
-exports.removeAppImpl = function (appName, left, right) {
+exports.getAppNameImpl = function (app, right, left) {
   try {
-    return right(admin.removeApp(appName));
+    return right(app.name);
   } catch (e) {
     return left(e.toJSON())
   }
 }
 
-exports.defaultAuthImpl = function (left, right) {
+exports.getAppOptionsImpl = function (app, right, left) {
   try {
-    return right(admin.auth());
+    return right(app.options);
   } catch (e) {
-    return left(e.toJSON());
+    return left(e.toJSON())
   }
+}
+
+exports.deleteAppImpl = function (app) {
+  return app.delete();
 }
 
 exports.authImpl = function (firebaseApp) {
