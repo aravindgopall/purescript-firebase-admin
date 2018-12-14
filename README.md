@@ -10,3 +10,5 @@
 ```
 bower install purescript-firebase-admin
 ```
+
+[Module Documentation](generated-docs/Admin.md)
