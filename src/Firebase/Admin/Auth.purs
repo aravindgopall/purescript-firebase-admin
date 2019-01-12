@@ -5,6 +5,6 @@ module Firebase.Admin.Auth (
 ) where
 
 import Firebase.Admin.Auth.ImportUser (HashAlgorithmType, UserImportHashOptions, UserImportHashOptions_r, UserImportOptions, UserImportRecord, UserImportRecord_r, UserImportResult, importUsers, importUsers') as AIU
-import Firebase.Admin.Auth.Types (CreateRequest, CreateRequest_r, FirebaseAuth, ListUsersResult, UpdateRequest, UpdateRequest_r, UserInfo, UserMetadata, UserRecord) as AT
-import Firebase.Admin.Auth.Internal (createUser, deleteUser, getUser, getUserByEmail, getUserByPhoneNumber, listFirstUsers, listUsers, listUsers', updateUser) as Internal
- 
+import Firebase.Admin.Auth.Types (ActionCodeSettings(..), ActionCodeSettings_r, AndroidActionCodeSettings(..), AndroidActionCodeSettings_r, CreateRequest(..), CreateRequest_r, DecodedIdToken(..), FirebaseAuth, IOSActionCodeSettings(..), IOSActionCodeSettings_r, ListUsersResult(..), SessionCookieOptions, SignInProvider(..), UpdateRequest(..), UpdateRequest_r, UserInfo(..), UserMetadata, UserRecord(..), actionCodeSettings, androidActionCodeSettings, createUserRequest, defaultCreateRequest, defaultUpdateRequest, iosActionCodeSettings, toSignInProvider, updateUserRequest) as AT
+import Firebase.Admin.Auth.Internal (createCustomToken, createCustomToken', createSessionCookie, createUser, createUser', deleteCustomUserClaims, deleteUser, generateEmailVerificationLink, generateEmailVerificationLink', generatePasswordResetLink, generatePasswordResetLink', generateSignInWithEmailLink, getUser, getUser', getUserByEmail, getUserByEmail', getUserByPhoneNumber, getUserByPhoneNumber', listCustomUsers, listCustomUsers', listUsers, listUsers', revokeRefreshTokens, setCustomUserClaims, updateUser, updateUser', verifyIdToken, verifyIdToken', verifySessionCookie) as Internal
+  

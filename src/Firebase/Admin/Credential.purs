@@ -23,7 +23,7 @@ import Effect.Aff (Aff)
 import Effect.Uncurried (EffectFn2, EffectFn3, runEffectFn2, runEffectFn3)
 import Firebase.Admin.Error (AppError, FirebaseError, appError)
 import Firebase.Admin.Types (Credential)
-import Firebase.Admin.Utils (liftEiher, liftEitherEffect)
+import Firebase.Admin.Unsafe (liftEiher, liftEitherEffect)
 
 type Path = String 
 type CredentialFE = Either FirebaseError Credential
@@ -41,26 +41,6 @@ type RefreshToken =
   , type :: String
   }
 
-
-foreign import credentialCertPathImpl 
-  :: forall a e
-  . EffectFn3 Path (a -> CredentialFE) (e -> CredentialFE) CredentialFE
-
-foreign import credentialCertImpl 
-  :: forall a e
-  . Fn3 Certificate (a -> CredentialFE) (e -> CredentialFE) CredentialFE
-
-foreign import credentialRefreshTokenPathImpl 
-  :: forall a e
-  . EffectFn3 Path (a -> CredentialFE) (e -> CredentialFE) CredentialFE
-
-foreign import credentialRefreshTokenImpl
-  :: forall a e
-  . Fn3 RefreshToken (a -> CredentialFE) (e -> CredentialFE) CredentialFE
-
-foreign import credentialDefaultImpl 
-  :: forall a e
-  . EffectFn2 (a -> CredentialFE) (e -> CredentialFE) CredentialFE
 
 -- | Returns an unsafe Aff Credential created from the provided service account that grants admin access to Firebase services.
 credentialCertPath :: Path -> Aff Credential
@@ -107,3 +87,24 @@ credentialDefault' :: Effect (Either AppError Credential)
 credentialDefault' = 
   lmap appError <$> runEffectFn2 credentialDefaultImpl Right Left
 
+
+-- Foreign functions
+foreign import credentialCertPathImpl 
+  :: forall a e
+  . EffectFn3 Path (a -> CredentialFE) (e -> CredentialFE) CredentialFE
+
+foreign import credentialCertImpl 
+  :: forall a e
+  . Fn3 Certificate (a -> CredentialFE) (e -> CredentialFE) CredentialFE
+
+foreign import credentialRefreshTokenPathImpl 
+  :: forall a e
+  . EffectFn3 Path (a -> CredentialFE) (e -> CredentialFE) CredentialFE
+
+foreign import credentialRefreshTokenImpl
+  :: forall a e
+  . Fn3 RefreshToken (a -> CredentialFE) (e -> CredentialFE) CredentialFE
+
+foreign import credentialDefaultImpl 
+  :: forall a e
+  . EffectFn2 (a -> CredentialFE) (e -> CredentialFE) CredentialFE

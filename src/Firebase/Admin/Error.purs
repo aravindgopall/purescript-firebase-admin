@@ -2,16 +2,30 @@ module Firebase.Admin.Error where
   
 import Prelude
 
+import Data.Generic.Rep (class Generic)
+import Data.Generic.Rep.Show (genericShow)
+import Foreign.Class (class Decode)
+import Foreign.Generic (defaultOptions, genericDecode)
+
 type FirebaseError = 
   { code :: String
   , message :: String  
   }
 
-type FirebaseArrayIndexError = 
-  { index :: Number 
+data FirebaseArrayIndexError = FirebaseArrayIndexError
+  { index :: Int 
   , error :: FirebaseError
   }
-  
+
+derive instance genericFirebaseArrayIndexError :: Generic FirebaseArrayIndexError _
+
+instance showFirebaseArrayIndexError :: Show FirebaseArrayIndexError where
+  show = genericShow
+
+instance decodeFirebaseArrayIndexError :: Decode FirebaseArrayIndexError where
+   decode x = genericDecode (defaultOptions { unwrapSingleConstructors = true }) x
+
+
 -- | App client error codes and their default messages.  
 data AppErrorCode 
   = AppDeleted  

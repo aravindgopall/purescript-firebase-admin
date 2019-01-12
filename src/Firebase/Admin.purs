@@ -12,7 +12,8 @@ module Firebase.Admin (
   firebaseApp,
   firebaseApp',
 
-  firebaseAuth
+  firebaseAuth,
+  firebaseStorage
 ) where
 
 import Prelude
@@ -29,7 +30,8 @@ import Firebase.Admin.Error (AppError(..), AppErrorCode(..), FirebaseError, appE
 import Firebase.Admin.Error (AppError, FirebaseError, appError)
 import Firebase.Admin.Types (Credential, Firebase, FirebaseAppOptions, FirebaseAppOptions_r, defaultAppName, firebaseConfigVar) as Types
 import Firebase.Admin.Types (Credential, Firebase, FirebaseAppOptions_r, FirebaseAppOptions)
-import Firebase.Admin.Utils (liftEiher, liftEitherEffect)
+import Firebase.Admin.Unsafe (liftEiher, liftEitherEffect)
+import Main (FirebaseStorage)
 import Prim.Row (class Union)
 
 type FirebaseFE = Either FirebaseError Firebase
@@ -96,6 +98,10 @@ firebaseApp' name = lmap appError $ runFn3 appImpl name Right Left
 firebaseAuth :: Firebase -> FirebaseAuth
 firebaseAuth = runFn1 authImpl
 
+-- | Gets the `Auth` service namespace from explicitly specified app.
+firebaseStorage :: Firebase -> FirebaseStorage
+firebaseStorage = runFn1 storageImpl
+
 -- Foreign functions 
 foreign import initializeDefaultAppImpl 
   :: forall a e
@@ -114,6 +120,7 @@ foreign import initializeAppImpl
       FirebaseFE
 
 foreign import authImpl :: Fn1 Firebase FirebaseAuth
+foreign import storageImpl :: Fn1 Firebase FirebaseStorage
 
 foreign import appImpl 
   :: forall a e

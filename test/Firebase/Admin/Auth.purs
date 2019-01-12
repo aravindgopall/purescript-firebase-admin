@@ -4,8 +4,19 @@ import Prelude
 
 import Control.Monad.Free (Free)
 import Data.Array (length)
+import Data.Bifunctor (lmap)
+import Data.Either (Either, either, isLeft, isRight)
+import Data.List.Lazy.Types (NonEmptyList(..))
+import Data.Maybe (Maybe(..))
+import Effect.Aff (Aff, attempt, catchError)
+import Effect.Class (liftEffect)
+import Effect.Class.Console (logShow)
+import Effect.Console (log)
 import Firebase.Admin (deleteApp, firebaseAuth)
-import Firebase.Admin.Auth (createUser, deleteUser, getUser, listUsers', updateUser)
+import Firebase.Admin.Auth (ListUsersResult(..), UserRecord(..), createCustomToken', createUser, deleteUser, getUser, getUserByEmail, listUsers', updateUser, verifyIdToken, verifyIdToken', createSessionCookie, generateEmailVerificationLink)
+import Firebase.Admin.Auth.Internal (deleteCustomUserClaims, setCustomUserClaims)
+import Foreign (ForeignError(..), renderForeignError)
+import Foreign.Class (decode)
 import Test.Firebase.Admin.Common (getApp)
 import Test.Unit (TestF, test)
 import Test.Unit.Assert (assert)
@@ -18,16 +29,35 @@ testFirebaseAuth = do
   test "CRUD test" do 
     app <- getApp
     let auth = firebaseAuth app
-    lst <- listUsers' auth
-    assert "list empty users" (0 == length lst.users)
-    createdUser <- createUser auth { email: testEmail }
-    assert "create user success" (createdUser.email == testEmail) 
-    user <- getUser auth createdUser.uid
-    assert "get user success" (createdUser.uid == user.uid) 
-    updatedUser <- updateUser auth user.uid { displayName: "Test" }
-    assert "update user success" (updatedUser.displayName == "Test") 
+    -- clear user if exists
+    eOldUser <- attempt $ getUserByEmail auth testEmail
+    _ <- either (pure <<< const unit) (\(UserRecord u) -> deleteUser auth u.uid) eOldUser
 
+    (ListUsersResult { users }) <- listUsers' auth 
+    assert "list empty users" (length users >= 0)
+
+    (UserRecord createdUser) <- createUser auth { email: Just testEmail }
+    assert "create user success" (createdUser.email == Just testEmail) 
+
+    (UserRecord user) <- getUser auth createdUser.uid
+    assert "get user success" (createdUser.uid == user.uid) 
+
+    (UserRecord updatedUser) <- updateUser auth user.uid { displayName: Just "Test" }
+    assert "update user success" (updatedUser.displayName == Just "Test") 
+
+    token <- createCustomToken' auth user.uid 
+    assert "create custom token successfully" (token /= "")
+    
+    idToken <- attempt $ verifyIdToken auth token false
+    assert "Can't verify custom token" (isLeft idToken)
+
+    link <- generateEmailVerificationLink auth testEmail { url: "http://localhost" }
+    assert "Can get verification email url" (link /= "")
+
+    deleteCustomUserClaims auth user.uid
+    assert "Can delete custoemr user claims" true
+    
     deleteUser auth user.uid
     assert "Delete user success" true 
-    deleteApp app
+    deleteApp app 
      

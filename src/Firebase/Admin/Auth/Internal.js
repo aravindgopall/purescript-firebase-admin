@@ -1,15 +1,8 @@
 'use strict';
 
 
-function _listUsers(auth, maxResults, pageToken, nothing, just) {
-  return auth.listUsers(maxResults, pageToken)
-    .then(function (result) {
-      return {
-        users: result.users,
-        nextPageToken: result.nextPageToken 
-          ? just(result.nextPageToken) : nothing()
-      };
-    });
+function _listUsers(auth, maxResults, pageToken) {
+  return auth.listUsers(maxResults, pageToken);
 }
 
 exports._createUser = function (auth, properties) {
@@ -38,11 +31,58 @@ exports._getUserByPhoneNumber = function (auth, phoneNumber) {
 
 exports._listUsers = _listUsers;
 
-exports.__listUsers = function (auth, nothing, just) {
-  return _listUsers(auth, undefined, undefined, nothing, just);
+exports.__listUsers = function (auth) {
+  return _listUsers(auth);
 }
 
-exports._ListFirstUsers = function (auth, maxResults) {
-  return _listUsers(auth, maxResults, undefined, nothing, just);
+exports._verifyIdToken = function (auth, idToken, checkRevoked) {
+  return auth.verifyIdToken(idToken, checkRevoked);
 }
 
+exports._createCustomToken = function (auth, uid, developerClaims) {
+  return auth.createCustomToken(uid, developerClaims);
+}
+
+exports.__createCustomToken = function (auth, uid) {
+  return auth.createCustomToken(uid);
+}
+
+exports._createSessionCookie = function (auth, idToken, sessionCookieOptions) {
+  return auth.createSessionCookie(idToken, sessionCookieOptions);
+}
+
+exports.__generateEmailVerificationLink = function (auth, email) {
+  return auth.generateEmailVerificationLink(email);
+}
+
+exports._generateEmailVerificationLink = function (auth, email, actionCodeSettings) {
+  return auth.generateEmailVerificationLink(email, actionCodeSettings);
+}
+
+exports.__generatePasswordResetLink = function (auth, email) {
+  return auth.generatePasswordResetLink(email);
+}
+
+exports._generatePasswordResetLink = function (auth, email, actionCodeSettings) {
+  return auth.generatePasswordResetLink(email, actionCodeSettings);
+}
+
+exports._generateSignInWithEmailLink = function (auth, email, actionCodeSettings) {
+  return auth.generateSignInWithEmailLink(email, actionCodeSettings);
+}
+
+exports._revokeRefreshTokens = function (auth, uid) {
+  return auth.revokeRefreshTokens(uid);
+}
+
+exports._setCustomUserClaims = function (auth, uid, customUserClaims) {
+  return auth.setCustomUserClaims(uid, customUserClaims);
+}
+
+exports._deleteCustomUserClaims = function (auth, uid) {
+  return auth.setCustomUserClaims(uid, null);
+}
+
+exports._verifySessionCookie = function (auth, sessionCookie, checkRevoked) {
+  return auth.verifySessionCookie(sessionCookie, checkRevoked);
+}

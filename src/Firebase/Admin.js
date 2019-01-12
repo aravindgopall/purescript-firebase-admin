@@ -49,3 +49,7 @@ exports.deleteAppImpl = function (app) {
 exports.authImpl = function (firebaseApp) {
   return firebaseApp.auth();
 }
+
+exports.storageImpl = function (firebaseApp) {
+  return firebaseApp.storage();
+}

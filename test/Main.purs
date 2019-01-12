@@ -21,4 +21,3 @@ main =
         assert "get name success" $ defaultAppName == name
         _ <- deleteApp app
         assert "" true
- 
