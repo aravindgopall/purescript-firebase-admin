@@ -28,10 +28,10 @@ import Effect.Uncurried (EffectFn1, EffectFn2, runEffectFn1, runEffectFn2)
 import Firebase.Admin.Auth (FirebaseAuth)
 import Firebase.Admin.Error (AppError(..), AppErrorCode(..), FirebaseError, appError, appErrorCode) as FE
 import Firebase.Admin.Error (AppError, FirebaseError, appError)
+import Firebase.Admin.Storage.Types (FirebaseStorage)
 import Firebase.Admin.Types (Credential, Firebase, FirebaseAppOptions, FirebaseAppOptions_r, defaultAppName, firebaseConfigVar) as Types
 import Firebase.Admin.Types (Credential, Firebase, FirebaseAppOptions_r, FirebaseAppOptions)
 import Firebase.Admin.Unsafe (liftEiher, liftEitherEffect)
-import Main (FirebaseStorage)
 import Prim.Row (class Union)
 
 type FirebaseFE = Either FirebaseError Firebase
